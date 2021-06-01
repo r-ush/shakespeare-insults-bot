@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@types/node": "^15.6.1",
+    "dotenv": "^10.0.0",
     "twit": "^2.2.11",
     "typescript": "^4.3.2"
   },
