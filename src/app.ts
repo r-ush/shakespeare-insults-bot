@@ -1,25 +1,47 @@
-var Twit = require("twit");
+import express, { Application, Response } from "express";
+import cron from "node-cron";
 import * as dotenv from "dotenv";
 import { shake } from "./utils/insults";
+
+var Twit = require("twit");
 
 dotenv.config();
 
 const { env } = process;
+
+const app: Application = express();
+
+const port = process.env.PORT || "8000";
 
 var T = new Twit({
   consumer_key: env.API_KEY,
   consumer_secret: env.API_SECRET_KEY,
   access_token: env.ACCESS_TOKEN,
   access_token_secret: env.ACCESS_TOKEN_SECRET,
-  timeout_ms: 60 * 1000, // optional HTTP request timeout to apply to all requests.
+  timeout_ms: 60 * 1000,
 });
 
-// T.post(
-//   "statuses/update",
-//   { status: "Insult goes here! <3" },
-//   function (err: any, data: any, response: any) {
-//     console.log(data);
-//   }
-// );
+// everyday at 1800hrs
+// 0 18 * * *
 
-console.log(shake());
+cron.schedule("* * * * * *", function () {
+  const insult = shake();
+
+  console.log(insult);
+
+  T.post(
+    "statuses/update",
+    { status: insult },
+    function (err: any, data: any, response: any) {
+      console.log(data);
+    }
+  );
+});
+
+app
+  .listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  })
+  .on("error", (error: Error) =>
+    console.log("Error starting server:>>", error)
+  );
