@@ -24,7 +24,11 @@ var T = new Twit({
 // everyday at 1800hrs
 // 0 18 * * *
 
-cron.schedule("* * * * * *", function () {
+// every second * * * * * *
+
+// every min * * * * *
+
+cron.schedule("0 18 * * *", function () {
   const insult = shake();
 
   console.log(insult);
