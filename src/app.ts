@@ -42,6 +42,10 @@ cron.schedule("0 18 * * *", function () {
   );
 });
 
+app.get("/", (_, res) => {
+  res.send("yo");
+});
+
 app
   .listen(port, () => {
     console.log(`Server running on port ${port}`);
